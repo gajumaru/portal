@@ -1,0 +1,17 @@
+{
+  "name": "gajumaru-portal",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.0.1",
+    "ejs": "0.8.3"
+  },
+  "devDependencies": {
+    "mocha": "1.6.0",
+    "should": "1.2.1",
+    "request": "2.11.4"
+  }
+}
