@@ -40,7 +40,6 @@ var setupRouting = function(routesDir) {
             app.put(urlPath + '/:id', handler[f]);
             break;
           case 'login':
-						console.log('login');
 						app.post(urlPath, handler[f]);
             break;
 					case 'destroy':
