@@ -12,9 +12,15 @@ var testUrl = function(path) {
 };
 
 var login = function(user) {
-  user.post(testUrl('/login')).send({ userId: 'test', password: 'test' }).end(function(err, res) {
-    should.not.exist(err);
-  });
+  return function(done) {
+    user.get(testUrl('/login')).end(function(err, res) {
+      should.not.exist(err);
+      user.post(testUrl('/login')).send({ userId: 'test', password: 'test' }).end(function(err, res) {
+        should.not.exist(err);
+        done();
+      });
+    });
+  };
 };
 
 describe('appのテスト', function() {
@@ -42,7 +48,8 @@ describe('appのテスト', function() {
 
     describe('ログイン済の場合', function() {
       var user = superagent.agent();
-      login(user);
+      before(login(user));
+
       it('トップ画面へアクセスできること', function(done) {
         user.get(testUrl('/')).end(function(err, res) {
           should.not.exist(err);
