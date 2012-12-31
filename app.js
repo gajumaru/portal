@@ -40,9 +40,9 @@ var setupRouting = function(routesDir) {
             app.put(urlPath + '/:id', handler[f]);
             break;
           case 'login':
-						app.post(urlPath, handler[f]);
+            app.post(urlPath, handler[f]);
             break;
-					case 'destroy':
+          case 'destroy':
             app.del(urlPath + '/:id', handler[f]);
             break;
           default:
@@ -77,7 +77,7 @@ app.configure(function() {
     if ('/login' != req.path && !req.session.userId) {
       res.redirect('/login');
     }
-		next();
+    next();
   });
 });
 
