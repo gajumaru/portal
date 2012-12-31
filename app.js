@@ -39,6 +39,9 @@ var setupRouting = function(routesDir) {
           case 'update':
             app.put(urlPath + '/:id', handler[f]);
             break;
+          case 'login':
+            app.post(urlPath, handler[f]);
+            break;
           case 'destroy':
             app.del(urlPath + '/:id', handler[f]);
             break;
@@ -58,12 +61,25 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(express.session({secret: 'your secret here'}));
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+});
+
+app.configure(function() {
+  // Login Check
+  app.all('/', function(req, res, next) {
+    if ('/login' != req.path && !req.session.userId) {
+      res.redirect('/login');
+      return;
+    }
+    next();
+  });
 });
 
 setupRouting(path.resolve(path.join(__dirname, 'routes')));
