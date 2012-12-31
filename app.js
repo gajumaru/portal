@@ -76,6 +76,7 @@ app.configure(function() {
   app.all('/', function(req, res, next) {
     if ('/login' != req.path && !req.session.userId) {
       res.redirect('/login');
+      return;
     }
     next();
   });
