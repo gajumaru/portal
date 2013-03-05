@@ -1,0 +1,22 @@
+## テスト環境用設定ファイル
+
+# Redmineデータベース接続情報
+redmineDatabase:
+  dialect: sqlite
+  storage: test/db/redmine.sqlite
+
+# 有効なユーザ情報
+validUser:
+  login: valid_user
+  status: 1
+  salt: pkm34fj6ir7jndj2fe0
+  clearPassword: password
+  hashedPassword: 1d575ca3e1152648c47c56519129ddf64ce5f63b
+
+# ロック状態のユーザ情報
+lockedUser:
+  login: locked_user
+  status: 3
+  salt: pkm34fj6ir7jndj2fe0
+  clearPassword: password
+  hashedPassword: 1d575ca3e1152648c47c56519129ddf64ce5f63b

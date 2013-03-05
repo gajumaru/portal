@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
             callback(err);
             return;
           }          
-          if (user && user.active && user.verifyPassword(password)) {
+          if (user && user.active() && user.verifyPassword(password)) {
             callback(null, user);
             return;
           }
