@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   var STATUS_ACTIVE = 1;
 
   var User = sequelize.define('user', {
-    id: {type: DataTypes.INTEGER, primaryKey: true},
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     login: DataTypes.STRING,
     hashed_password: DataTypes.STRING,
     firstname: DataTypes.STRING,

@@ -1,22 +1,8 @@
-var config = require('config').redmineDatabase;
-var Sequelize = require('sequelize');
-var sequelize;
-if (config.dialect !== 'sqlite') {
-  sequelize = new Sequelize(config.database, config.user, config.password, {
-    dialect: config.dialect || 'mysql',
-    host: config.host,
-    port: config.port || 3306
-  });
-} else {
-  sequelize = new Sequelize('', '', '', {
-    dialect: 'sqlite',
-    storage: config.storage
-  });
-}
-var User = sequelize.import(__dirname + "/../models/user");
+var dbConnector = require('db-connect'),
+    redmineDB = dbConnector.connectRedmine(),
+    User = redmineDB.loadEntity('user');
 
 exports.index = function(req, res) {
-  // redirect to index
   res.render('login', {title:'login', message:''});
 };
 
