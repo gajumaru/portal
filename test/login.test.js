@@ -53,31 +53,31 @@ describe('loginのテスト', function() {
       var inValidUser = superagent.agent();
       it('ユーザIDが未入力の場合、ログインできないこと', function(done) {
         tryToLogin('', config.validUser.clearPassword, function(res) {
-          res.text.should.include(messages.userId_is_required);
+          res.text.should.include(messages.get('is_required', 'userId'));
           done();
         });
       });
       it('パスワードが未入力の場合、ログインできないこと', function(done) {
         tryToLogin(config.validUser.login, '', function(res) {
-          res.text.should.include(messages.password_is_required);
+          res.text.should.include(messages.get('is_required', 'password'));
           done();
         });
       });
       it('ユーザIDが誤っている場合、ログインできないこと', function(done) {
         tryToLogin('invalidUserId', config.validUser.clearPassword, function(res) {
-          res.text.should.include(messages.invalid_userId_or_password);
+          res.text.should.include(messages.get('invalid_userId_or_password'));
           done();
         });
       });
       it('パスワードが誤っている場合、ログインできないこと', function(done) {
         tryToLogin(config.validUser.login, 'invalidPassword', function(res) {
-          res.text.should.include(messages.invalid_userId_or_password);
+          res.text.should.include(messages.get('invalid_userId_or_password'));
           done();
         });
       });
       it('ロックされたユーザの場合、ログインできないこと', function(done) {
         tryToLogin(config.lockedUser.login, config.lockedUser.clearPassword, function(res) {
-          res.text.should.include(messages.invalid_userId_or_password);
+          res.text.should.include(messages.get('invalid_userId_or_password'));
           done();
         });
       });

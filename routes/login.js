@@ -9,11 +9,11 @@ exports.index = function(req, res) {
 
 exports.login = function(req, res) {
   if (!req.body.userId) {
-    res.render('login', {title: 'ERROR', message: messages.userId_is_required});
+    res.render('login', {title: 'ERROR', message: messages.get('is_required', 'userId')});
     return;
   }
   if (!req.body.password) {
-    res.render('login', {title: 'ERROR', message: messages.password_is_required});
+    res.render('login', {title: 'ERROR', message: messages.get('is_required', 'password')});
     return; 
   }
   User.tryToLogin(req.body.userId, req.body.password, function(err, user) {
@@ -21,7 +21,7 @@ exports.login = function(req, res) {
       throw err;
     }
     if (!user) {
-      res.render('login', {title: 'ERROR', message: messages.invalid_userId_or_password});
+      res.render('login', {title: 'ERROR', message: messages.get('invalid_userId_or_password')});
       return;
     }
     req.session.regenerate(function(err) {
