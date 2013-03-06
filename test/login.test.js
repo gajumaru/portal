@@ -1,4 +1,5 @@
-var config = require('config'),
+var messages = require('message'),
+    config = require('config'),
     should = require('should'),
     superagent = require('superagent'),
     dbConnector = require('db-connect'),
@@ -52,31 +53,31 @@ describe('loginのテスト', function() {
       var inValidUser = superagent.agent();
       it('ユーザIDが未入力の場合、ログインできないこと', function(done) {
         tryToLogin('', config.validUser.clearPassword, function(res) {
-          res.text.should.include('Please enter USER ID');
+          res.text.should.include(messages.userId_is_required);
           done();
         });
       });
       it('パスワードが未入力の場合、ログインできないこと', function(done) {
         tryToLogin(config.validUser.login, '', function(res) {
-          res.text.should.include('Please enter PASSWORD');
+          res.text.should.include(messages.password_is_required);
           done();
         });
       });
       it('ユーザIDが誤っている場合、ログインできないこと', function(done) {
         tryToLogin('invalidUserId', config.validUser.clearPassword, function(res) {
-          res.text.should.include('ユーザIDかパスワードが誤っています');
+          res.text.should.include(messages.invalid_userId_or_password);
           done();
         });
       });
       it('パスワードが誤っている場合、ログインできないこと', function(done) {
         tryToLogin(config.validUser.login, 'invalidPassword', function(res) {
-          res.text.should.include('ユーザIDかパスワードが誤っています');
+          res.text.should.include(messages.invalid_userId_or_password);
           done();
         });
       });
       it('ロックされたユーザの場合、ログインできないこと', function(done) {
         tryToLogin(config.lockedUser.login, config.lockedUser.clearPassword, function(res) {
-          res.text.should.include('ユーザIDかパスワードが誤っています');
+          res.text.should.include(messages.invalid_userId_or_password);
           done();
         });
       });

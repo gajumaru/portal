@@ -1,0 +1,3 @@
+userId_is_required: ユーザIDを入力してください
+password_is_required: パスワードを入力してください
+invalid_userId_or_password: ユーザIDかパスワードが誤っています
