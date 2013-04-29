@@ -3,16 +3,24 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "NODE_PATH=lib node app",
+    "test": "NODE_ENV=test NODE_PATH=lib mocha"
   },
   "dependencies": {
     "express": "3.0.1",
-    "ejs": "0.8.3"
+    "ejs": "0.8.3",
+    "persist": "0.2.7",
+    "mysql": "latest",
+    "config": "0.4.22",
+    "js-yaml": "2.0.4",
+    "async": "latest"
   },
   "devDependencies": {
     "mocha": "1.6.0",
     "should": "1.2.1",
     "request": "2.11.4",
-    "superagent": "0.10.0"
+    "superagent": "0.10.0",
+    "db-migrate": "0.4.2",
+    "sqlite3": "latest"
   }
 }
