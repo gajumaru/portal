@@ -1,43 +1,25 @@
-var app = require('../app.js');
-
-var should = require('should'),
+var config = require('config'),
+    should = require('should'),
     superagent = require('superagent'),
-    util = require('util');
-
-var testUrl = function(path) {
-  if (path.substr(0, 1) !== '/') {
-    path = '/' + path;
-  }
-  return util.format('http://localhost:%d%s', app.get('port'), path);
-};
-
-var login = function(user) {
-  return function(done) {
-    user.get(testUrl('/login')).end(function(err, res) {
-      should.not.exist(err);
-      user.post(testUrl('/login')).send({ userId: 'test', password: 'test' }).end(function(err, res) {
-        should.not.exist(err);
-        done();
-      });
-    });
-  };
-};
+    loginHelper = require('./helper/login'),
+    setupFixtureHelper = require('./helper/setup-fixture'),
+    urlHelper = require('./helper/url');
 
 describe('appのテスト', function() {
   describe('ログインチェック、ルーティング', function() {
     describe('未ログインの場合', function() {
       var anon = superagent.agent();
       it('トップ画面へアクセスしても、ログイン画面へリダイレクトされること', function(done) {
-        anon.get(testUrl('/')).end(function(err, res) {
+        anon.get(urlHelper.toUrl('/')).end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
-          res.redirects.should.eql([testUrl('/login')]);
+          res.redirects.should.eql([urlHelper.toUrl('/login')]);
           done();
         });
       });
 
       it('ログイン画面へはアクセスできること', function(done) {
-        anon.get(testUrl('/login')).end(function(err, res) {
+        anon.get(urlHelper.toUrl('/login')).end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
           res.should.be.html;
@@ -48,10 +30,11 @@ describe('appのテスト', function() {
 
     describe('ログイン済の場合', function() {
       var user = superagent.agent();
-      before(login(user));
+      before(setupFixtureHelper.setupCommonData());
+      before(loginHelper.login(user));
 
       it('トップ画面へアクセスできること', function(done) {
-        user.get(testUrl('/')).end(function(err, res) {
+        user.get(urlHelper.toUrl('/')).end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
           res.should.be.html;

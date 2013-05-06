@@ -1,0 +1,17 @@
+# valid user
+- login:  valid_user
+  hashedPassword: 1d575ca3e1152648c47c56519129ddf64ce5f63b
+  firstname: 太郎
+  lastname: 有効
+  mail: valid_user@example.jp
+  status: 1
+  salt: pkm34fj6ir7jndj2fe0
+
+# locked user
+- login:  locked_user
+  hashedPassword: 1d575ca3e1152648c47c56519129ddf64ce5f63b
+  firstname: 太郎
+  lastname: ロック
+  mail: locked_user@example.jp
+  status: 3
+  salt: pkm34fj6ir7jndj2fe0

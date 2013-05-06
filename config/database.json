@@ -1,0 +1,28 @@
+{
+  "default": "development",
+
+  "development": {
+    "driver": "mysql",
+    "host": "localhost",
+    "port": "3306",
+    "database": "gajumaru_portal_dev",
+    "user": "gajumarudev",
+    "password": "gajumarudev",
+    "trace": true
+  },
+
+  "test": {
+    "driver": "sqlite3",
+    "filename": "test/db/gajumaru_portal.sqlite3",
+    "trace": true
+  },
+
+  "production": {
+    "driver": "mysql",
+    "host": "localhost",
+    "port": "3306",
+    "database": "gajumaru_portal",
+    "user": "gajumaru",
+    "password": "gajumaru"
+  }
+}
