@@ -1,1 +1,3 @@
+config/runtime.json
 node_modules/
+test/db/gajumaru_portal.sqlite3

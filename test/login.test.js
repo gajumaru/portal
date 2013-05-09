@@ -1,21 +1,29 @@
-var app = require('../app.js');
-
-var should = require('should'),
+var messages = require('message'),
+    should = require('should'),
     superagent = require('superagent'),
-    util = require('util');
+    setupFixtureHelper = require('./helper/setup-fixture'),
+    urlHelper = require('./helper/url');
 
-var testUrl = function(path) {
-  if (path.substr(0, 1) !== '/') {
-    path = '/' + path;
-  }
-  return util.format('http://localhost:%d%s', app.get('port'), path);
+var tryToLogin = function(userId, password, callback) {
+  var user = superagent.agent();
+  user
+    .post(urlHelper.toUrl('/login'))
+    .send({
+      userId: userId,
+      password: password
+    }).end(function(err, res) {
+      should.not.exist(err);
+      res.should.have.status(200);
+      res.should.be.html;
+      callback(res);
+    });
 };
 
 describe('loginのテスト', function() {
   describe('初期表示', function() {
     var anon = superagent.agent();
     it('ログイン画面が表示されること', function(done) {
-      anon.get(testUrl('/login')).end(function(err, res) {
+      anon.get(urlHelper.toUrl('/login')).end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
         res.should.be.html;
@@ -26,27 +34,47 @@ describe('loginのテスト', function() {
   });
 
   describe('ログイン', function() {
-    describe('正しいユーザ情報でログイン', function() {
+    before(setupFixtureHelper.setupCommonData());
+
+    describe('有効なユーザ情報でログイン', function() {
       var validUser = superagent.agent();
       it('トップ画面へ遷移すること', function(done) {
-        validUser.post(testUrl('/login')).send({ userId: 'test', password: 'test' }).end(function(err, res) {
-          should.not.exist(err);
-          res.should.have.status(200);
-          res.should.be.html;
-          res.redirects.should.eql([testUrl('/')]);
+        tryToLogin('valid_user', 'password', function(res) {
+          res.redirects.should.eql([urlHelper.toUrl('/')]);
           done();
         });
       });
     });
 
-    describe('誤ったユーザ情報でログイン', function() {
-      var wrongUser = superagent.agent();
-      it('ユーザIDが空の場合、ログインできないこと', function(done) {
-        wrongUser.post(testUrl('/login')).send({ userId: '' }).end(function(err, res) {
-          should.not.exist(err);
-          res.should.have.status(200);
-          res.should.be.html;
-          res.text.should.include('Please enter USER ID');
+    describe('有効でないユーザ情報でログイン', function() {
+      var inValidUser = superagent.agent();
+      it('ユーザIDが未入力の場合、ログインできないこと', function(done) {
+        tryToLogin('', 'password', function(res) {
+          res.text.should.include(messages.get('is_required', 'userId'));
+          done();
+        });
+      });
+      it('パスワードが未入力の場合、ログインできないこと', function(done) {
+        tryToLogin('valid_user', '', function(res) {
+          res.text.should.include(messages.get('is_required', 'password'));
+          done();
+        });
+      });
+      it('ユーザIDが誤っている場合、ログインできないこと', function(done) {
+        tryToLogin('invalidUserId', 'password', function(res) {
+          res.text.should.include(messages.get('invalid_userId_or_password'));
+          done();
+        });
+      });
+      it('パスワードが誤っている場合、ログインできないこと', function(done) {
+        tryToLogin('valid_user', 'invalidPassword', function(res) {
+          res.text.should.include(messages.get('invalid_userId_or_password'));
+          done();
+        });
+      });
+      it('ロックされたユーザの場合、ログインできないこと', function(done) {
+        tryToLogin('locked_user', 'password', function(res) {
+          res.text.should.include(messages.get('invalid_userId_or_password'));
           done();
         });
       });
