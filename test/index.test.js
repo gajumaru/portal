@@ -1,21 +1,18 @@
-var should = require('should'),
+var expect = require('expect.js'),
     superagent = require('superagent'),
-    setupFixtureHelper = require('./helper/setup-fixture'),
-    loginHelper = require('./helper/login'),
-    urlHelper = require('./helper/url');
+    helper = require('./helper');
 
 describe('indexのテスト', function() {
   var user = superagent.agent();
-  before(setupFixtureHelper.setupCommonData());
-  before(loginHelper.login(user));
+  before(helper.setupFixture.setupCommonData());
+  before(helper.login.login(user));
 
   describe('初期表示', function() {
     it('トップ画面が表示されること', function(done) {
-      user.get(urlHelper.toUrl('/')).end(function(err, res) {
-        should.not.exist(err);
-        res.should.have.status(200);
-        res.should.be.html;
-        res.text.should.include('Gajumaru Portal Top');
+      user.get(helper.url.toUrl('/')).end(function(err, res) {
+        expect(err).to.be(null);
+        expect(res.statusCode).to.be(200);
+        expect(res.text).to.contain('Gajumaru Portal Top');
         done();
       });
     });
