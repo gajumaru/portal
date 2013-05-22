@@ -1,6 +1,5 @@
 var models = require('models'),
     dbConnector = require('db-connect'),
-    should = require('should'),
     async = require('async'),
     domain = require('domain');
 
@@ -16,14 +15,18 @@ var setupFixture = exports.setupFixture = function(modelNames) {
 
   return function(done) {
     dbConnector.connect(function(err, conn) {
-      should.not.exist(err);
+      if (err) {
+       return done(err);
+      }
       conn.tx(function(err, tx) {
-        should.not.exist(err);
+        if (err) {
+          return done(err);
+        }
 
         d.on('error', function(err) {
           tx.rollback(function(rollbackErr) {
             conn.close();
-            should.not.exist(err);  
+            done(err);
           });
         });
 

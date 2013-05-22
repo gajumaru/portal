@@ -3,9 +3,10 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path');
+var express = require('express'),
+    http = require('http'),
+    path = require('path'),
+    models = require('models');
 
 var app = module.exports = express();
 
@@ -82,8 +83,14 @@ app.configure(function() {
   });
 });
 
-setupRouting(path.resolve(path.join(__dirname, 'routes')));
+// サービス起動前に全モデル定義を行う
+models.defineAllModels(function(err) {
+  if (err) {
+    throw err;
+  }
+  setupRouting(path.resolve(path.join(__dirname, 'routes')));
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+  });
 });

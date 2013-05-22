@@ -1,6 +1,6 @@
 # valid user
 - login:  valid_user
-  hashedPassword: 1d575ca3e1152648c47c56519129ddf64ce5f63b
+  hashed_password: 1d575ca3e1152648c47c56519129ddf64ce5f63b
   firstname: 太郎
   lastname: 有効
   mail: valid_user@example.jp
@@ -9,7 +9,7 @@
 
 # locked user
 - login:  locked_user
-  hashedPassword: 1d575ca3e1152648c47c56519129ddf64ce5f63b
+  hashed_password: 1d575ca3e1152648c47c56519129ddf64ce5f63b
   firstname: 太郎
   lastname: ロック
   mail: locked_user@example.jp
